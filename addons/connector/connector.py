@@ -59,7 +59,7 @@ class AdbConnector:
     def loadDevicesCount(self): return len(list(self._devices.keys()))
 
     def loadDevice(self, serial: str) -> None:
-        self._devices[serial] = adbutils.AdbDevice(serial=serial)
+        self._devices[serial] = adb.device(serial="33ff22xx")
 
     def loadAllDevices(self):
         for device in adb.device_list():
