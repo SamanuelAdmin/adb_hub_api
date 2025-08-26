@@ -1,4 +1,5 @@
 import uvicorn
+import sys
 from fastapi import FastAPI
 
 from addons.connector import AdbConnector
@@ -28,4 +29,6 @@ app.include_router(deviceRouter)
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+    if len(sys.argv) == 2:
+        uvicorn.run(app, host=sys.argv[1], port=int(sys.argv[2]))
+    else: uvicorn.run(app, host='0.0.0.0', port=8000)
