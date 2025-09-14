@@ -1,6 +1,8 @@
+import os
 import adbutils
 from adbutils import adb
 from typing import Optional, ClassVar, Self
+from uuid import UUID
 
 if __name__ == "__main__": from exception import *
 else: from .exception import *
@@ -14,17 +16,13 @@ class DeviceConnector:
     def device(self) -> adbutils.AdbDevice: return self._device
 
     def command(self, adbCommand: str) -> adbutils.ShellReturn:
-        result = self._device.shell(
-            adbCommand.split(' ')
-        )
-        print(result)
+        result = self._device.shell(adbCommand)
         return result
 
-    def getFile(self, filePath: str):
-        output = self._device.sync.read_bytes("/data/local/tmp/hi.txt")
-
-        with open(filePath, 'wb') as file:
-            file.write(output)
+    def getFile(self, filePath: str) -> str:
+        tempPathToFile = os.path.join(os.getcwd(), os.path.basename(filePath))
+        self._device.sync.pull(filePath, os.path.join(os.getcwd(), tempPathToFile))
+        return tempPathToFile
 
 
 class AdbConnector:

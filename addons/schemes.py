@@ -8,3 +8,6 @@ class StandardResponse(BaseModel):
 
 class Command(BaseModel):
     command: str
+
+class FilePath(BaseModel):
+    filename: str

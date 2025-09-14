@@ -17,7 +17,14 @@ def adbCommand(serial: str, command: Command):
             status=False, result=f'Device {serial} not found.'
         )
 
-    result = device.command(command)
+    splitedCommand = command.command.split(' ')
+
+    if splitedCommand[0] == "adb_pull":
+        pathToRemote = ' '.join(splitedCommand[1:])
+        result = device.getFile(pathToRemote)
+    else:
+        result = device.command(command.command)
+
     return StandardResponse(
         status=True, result=result
     )
