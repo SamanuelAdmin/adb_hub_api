@@ -20,9 +20,17 @@ class DeviceConnector:
         return result
 
     def getFile(self, filePath: str) -> str:
-        tempPathToFile = os.path.join(os.getcwd(), os.path.basename(filePath))
+        tempPathToFile = os.path.join(os.getcwd(), "temp", os.path.basename(filePath))
         self._device.sync.pull(filePath, os.path.join(os.getcwd(), tempPathToFile))
-        return tempPathToFile
+        return os.path.basename(tempPathToFile)
+
+    def sendFile(self, localFilePath: str, remoteFilePath: str= "/sdcard/", deviceFileName: str=None) -> bool:
+        if not os.path.basename(remoteFilePath):
+            remoteFilePath = os.path.join(
+                remoteFilePath, deviceFileName if deviceFileName else os.path.basename(localFilePath)
+            )
+
+        return bool(self._device.sync.push(localFilePath, remoteFilePath))
 
 
 class AdbConnector:
@@ -57,7 +65,7 @@ class AdbConnector:
     def loadDevicesCount(self): return len(list(self._devices.keys()))
 
     def loadDevice(self, serial: str) -> None:
-        self._devices[serial] = adb.device(serial="33ff22xx")
+        self._devices[serial] = adb.device(serial=serial)
 
     def loadAllDevices(self):
         for device in adb.device_list():
