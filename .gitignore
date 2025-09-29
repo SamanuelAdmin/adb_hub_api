@@ -6,3 +6,5 @@ venv/
 .env
 temp
 temp/
+uuid.txt
+test_main.http

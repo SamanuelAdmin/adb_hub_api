@@ -20,3 +20,12 @@ async def root() -> StandardResponse:
         status=True,
         result=adbConnector.loadDevicesCount,
     )
+
+@allRouter.get("/id")
+async def root() -> StandardResponse:
+    UUID = allRouter.HUB_UUID if hasattr(allRouter, 'HUB_UUID') else None
+
+    return StandardResponse(
+        status=True,
+        result=UUID
+    )
