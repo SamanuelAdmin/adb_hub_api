@@ -8,6 +8,7 @@ class StandardResponse(BaseModel):
 
 class Command(BaseModel):
     command: str
+    daemon: bool=False
 
 class FilePath(BaseModel):
     filename: str

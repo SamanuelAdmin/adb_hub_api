@@ -51,7 +51,7 @@ class Processor:
 
 
 @deviceRouter.post("/{serial}")
-def adbCommand(serial: str, command: Command, daemon: bool=False) -> StandardResponse:
+def adbCommand(serial: str, command: Command) -> StandardResponse:
     try: device = adbConnector.device(serial)
     except DeviceNotFound:
         return StandardResponse(
@@ -59,7 +59,7 @@ def adbCommand(serial: str, command: Command, daemon: bool=False) -> StandardRes
         )
 
     processor = Processor(device)
-    if daemon:
+    if command.daemon:
         threading.Thread(target=processor.process, args=(command,)).start()
         result: tuple[bool, str] = (True, 'Processing...')
     else:
