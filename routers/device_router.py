@@ -1,3 +1,4 @@
+import threading
 from fastapi import APIRouter
 import os
 import shlex
@@ -50,7 +51,7 @@ class Processor:
 
 
 @deviceRouter.post("/{serial}")
-def adbCommand(serial: str, command: Command):
+def adbCommand(serial: str, command: Command, daemon: bool=False) -> StandardResponse:
     try: device = adbConnector.device(serial)
     except DeviceNotFound:
         return StandardResponse(
@@ -58,7 +59,11 @@ def adbCommand(serial: str, command: Command):
         )
 
     processor = Processor(device)
-    result: tuple[bool, str] = processor.process(command)
+    if daemon:
+        threading.Thread(target=processor.process, args=(command,)).start()
+        result: tuple[bool, str] = (True, 'Processing...')
+    else:
+        result: tuple[bool, str] = processor.process(command)
 
     return StandardResponse(
         status=result[0], result=result[1]
