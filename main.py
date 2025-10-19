@@ -9,6 +9,10 @@ from addons.connector import AdbConnector
 from addons.schemes import *
 from routers import *
 
+# few configs
+TIMEOUT_KEEP_ALIVE = 120
+
+
 app = FastAPI()
 
 print("Connecting to Adb...")
@@ -56,5 +60,5 @@ app.include_router(fileRouter)
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
-        uvicorn.run(app, host=sys.argv[1], port=int(sys.argv[2]))
-    else: uvicorn.run(app, host='0.0.0.0', port=8000)
+        uvicorn.run(app, host=sys.argv[1], port=int(sys.argv[2]), timeout_keep_alive=TIMEOUT_KEEP_ALIVE)
+    else: uvicorn.run(app, host='0.0.0.0', port=8000, timeout_keep_alive=TIMEOUT_KEEP_ALIVE)
