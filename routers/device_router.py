@@ -58,6 +58,7 @@ def adbCommand(serial: str, command: Command) -> StandardResponse:
             status=False, result=f'Device {serial} not found.'
         )
 
+    print(f'{serial} New command {"(in daemon)" if command.daemon else ""} {command.command}')
     processor = Processor(device)
     if command.daemon:
         threading.Thread(target=processor.process, args=(command,)).start()
